@@ -4,47 +4,22 @@ import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 
 public class DirectionOffset implements Offset {
-	public enum Direction {
-		UPLEFT(-1, -1),
-		LEFT(-1, 0),
-		DOWNLEFT(-1, 1),
-		DOWN(0, 1),
-		DOWNRIGHT(1, 1),
-		RIGHT(1, 0),
-		UPRIGHT(1, -1),
-		UP(0, -1);
-		
-		private int offsetX, offsetY;
-		
-		private Direction(int offsetX, int offsetY) {
-			this.offsetX = offsetX;
-			this.offsetY = offsetY;
-		}
-
-		public int getOffsetX() {
-			return offsetX;
-		}
-
-		public int getOffsetY() {
-			return offsetY;
-		}
-	}
 	
-	private final Direction direction;
+	private final DirectionSource directionSource;
 	
-	public DirectionOffset(Direction direction) {
-		this.direction = direction;
+	public DirectionOffset(DirectionSource directionSource) {
+		this.directionSource = directionSource;
 	}
 	
 	public int getX(Grid<Cell> grid, Cell cell) {
-		return direction.getOffsetX();
+		return directionSource.getDirection(grid, cell).getOffsetX();
 	}
 
 	public int getY(Grid<Cell> grid, Cell cell) {
-		return direction.getOffsetY();
+		return directionSource.getDirection(grid, cell).getOffsetY();
 	}
 	
 	public String toString() {
-		return "OFFSET" + "(" + direction.toString() + ")";
+		return "OFFSET" + "(" + directionSource.toString() + ")";
 	}
 }
