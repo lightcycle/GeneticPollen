@@ -6,13 +6,14 @@ import org.lightcycle.alife.geneticpollen.context.Connected.Bound;
 import org.lightcycle.alife.geneticpollen.grid.Grid.WrapMode;
 
 public class Settings {
+	public static final long FPS = 60L;
 	public static final int WIDTH = 500;
-	public static final int HEIGHT = 200;
+	public static final int HEIGHT = 500;
 	public static final int NUMCELLS = 1000;
 	public static final int GENOME_SIZE = 100;
 	public static final int INITIAL_ENERGY = 100;
 	public static final int MOVE_ENERGY_COST = 5;
-	public static final int FLY_ENERGY_COST = 50;
+	public static final int FLY_ENERGY_COST = 30;
 	public static final int BIRTH_COST = 75;
 	public static final int AGE_ENERGY_COST = 1;
 	public static final int SUNLIT_ENERGY_GAIN = 20;

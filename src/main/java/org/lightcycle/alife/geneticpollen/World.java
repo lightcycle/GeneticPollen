@@ -36,6 +36,10 @@ public class World extends JPanel implements Runnable {
 	
 	private WritableRaster raster;
 	
+	private long lastUpdateNanos = 0L;
+	
+	private static final long FPS60NANOS = 1000000000L / Settings.FPS;
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -65,7 +69,6 @@ public class World extends JPanel implements Runnable {
 			if (!Settings.BOUNDRIES.isEmpty()) {
 				Connected.determineConnected(grid, Settings.BOUNDRIES);				
 			}
-			repaint();
 			Collections.shuffle(grid.getItems());
 			Cell[] cellArray = grid.getItems().toArray(new Cell[0]);
 			for (Cell cell : cellArray) {
@@ -75,6 +78,12 @@ public class World extends JPanel implements Runnable {
 					}
 				}
 				cell.update(grid, cell);
+			}
+			
+			long nowNanos = System.nanoTime();
+			if (nowNanos - lastUpdateNanos > FPS60NANOS) {
+				lastUpdateNanos = nowNanos;
+				repaint();
 			}
 		}
 	}
