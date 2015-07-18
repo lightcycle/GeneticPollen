@@ -6,7 +6,8 @@ import org.lightcycle.alife.geneticpollen.grid.Grid;
 public class NeighborhoodDirection implements DirectionSource {
 	enum Type {
 		MOST_NEIGHBORS,
-		MOST_ENERGY;
+		MOST_ENERGY,
+		CLOSEST_KINSHIP;
 	}
 	
 	private Type type;
@@ -17,7 +18,7 @@ public class NeighborhoodDirection implements DirectionSource {
 
 	@Override
 	public Direction getDirection(Grid<Cell> grid, Cell cell) {
-		double countX = 0, countY = 0;
+		long countX = 0, countY = 0;
 		for (Direction direction : Direction.values()) {
 			Cell neighbor = grid.get(cell.getX() + direction.getOffsetX(), cell.getY() + direction.getOffsetY());
 			if (neighbor != null) {
@@ -29,6 +30,10 @@ public class NeighborhoodDirection implements DirectionSource {
 				case MOST_NEIGHBORS:
 					countX += direction.getOffsetX();
 					countY += direction.getOffsetY();
+					break;
+				case CLOSEST_KINSHIP:
+					countX -= cell.getKinship(neighbor) * direction.getOffsetX();
+					countY -= cell.getKinship(neighbor) * direction.getOffsetY();
 					break;
 				}
 			}

@@ -9,8 +9,16 @@
 .project
 .settings/
 
+# IntelliJ
+.idea
+*.iml
+
 # Mac
 .DS_Store
+
+# Gradle
+build/
+.gradle/
 
 # Maven
 log/

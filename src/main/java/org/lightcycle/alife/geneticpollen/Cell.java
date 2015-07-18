@@ -118,10 +118,14 @@ public class Cell implements Coordinate2D, Context
 		if (lit) {
 			energy += Settings.SUNLIT_ENERGY_GAIN;
 		}
-		if (rules != null) {			
+		if (rules != null) {
+			int actions_taken = 0;
 			for (Rule rule : rules) {
 				if (rule.apply(grid, cell)) {
-					break;
+					actions_taken++;
+					if (actions_taken >= Settings.ACTIONS_PER_STEP) {
+						break;						
+					}
 				}
 			}
 		}

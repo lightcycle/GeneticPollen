@@ -1,0 +1,13 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = 'org.lightcycle.alife.geneticpollen.App'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.reflections:reflections:0.9.10"
+    testCompile 'junit:junit:4.12'
+}
