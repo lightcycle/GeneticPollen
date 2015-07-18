@@ -4,24 +4,21 @@ import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.action.Action;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 
-public class Rule {
+public class ConditionalAction implements ActionSource {
 	private Action action;
 	
 	private BooleanSource condition;
 	
-	public Rule(Action action, BooleanSource condition) {
+	public ConditionalAction(Action action, BooleanSource condition) {
 		this.action = action;
 		this.condition = condition;
 	}
-		
-	public boolean apply(Grid<Cell> grid, Cell cell) {
-		if (condition.getBoolean(grid, cell)) {
-			action.apply(grid, cell);
-			return true;
-		}
-		return false;
+
+	@Override
+	public Action getAction(Grid<Cell> grid, Cell cell) {
+		return (condition.getBoolean(grid, cell))?action:null;
 	}
-	
+
 	public String toString() {
 		return "(" + action.toString() + " <- " + condition.toString() + ")";
 	}

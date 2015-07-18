@@ -7,13 +7,15 @@ import java.util.Map;
 import java.util.Random;
 import java.util.WeakHashMap;
 
+import org.lightcycle.alife.geneticpollen.action.Action;
 import org.lightcycle.alife.geneticpollen.context.Context;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProvider;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProviderException;
 import org.lightcycle.alife.geneticpollen.genetics.Genomes.Genome;
 import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.Rule;
+import org.lightcycle.alife.geneticpollen.rules.ActionSource;
+import org.lightcycle.alife.geneticpollen.rules.ConditionalAction;
 
 public class Cell implements Coordinate2D, Context
 {
@@ -21,7 +23,9 @@ public class Cell implements Coordinate2D, Context
 	
 	private boolean lit, connected;
 	
-	private List<Rule> rules;
+	private ActionSource[] program;
+
+	private int programStep = 0;
 	
 	private int[] color;
 	
@@ -31,32 +35,32 @@ public class Cell implements Coordinate2D, Context
 	
 	private PhenotypeProvider phenotypeProvider;
 	
-	private static Map<Genome, List<Rule>> ruleCache;
+	private static Map<Genome, List<ActionSource>> programCache;
 	
-	private List<Rule> getRules(Genome genome) {
+	private ActionSource[] getRules(Genome genome) {
 		if (genome == null || phenotypeProvider == null) {
 			return null;
 		}
 		
-		if (ruleCache == null) {
-			ruleCache = new WeakHashMap<Genome, List<Rule>>();
+		if (programCache == null) {
+			programCache = new WeakHashMap<Genome, List<ActionSource>>();
 		}
 		
-		List<Rule> rules = ruleCache.get(genome);
-		if (rules == null) {
-			rules = new LinkedList<Rule>();
+		List<ActionSource> program = programCache.get(genome);
+		if (program == null) {
+			program = new LinkedList<ActionSource>();
 			Iterator<Integer> genomeInput = genome.iterator();
 			while(true) {
 				try {
-					rules.add(phenotypeProvider.getInstance(genomeInput, Rule.class));
+					program.add(phenotypeProvider.getInstance(genomeInput, ActionSource.class));
 				} catch (PhenotypeProviderException exception) {
 					break;
 				}
 			}
-			ruleCache.put(genome, rules);
+			programCache.put(genome, program);
 		}
 		
-		return rules;
+		return program.toArray(new ActionSource[0]);
 	}
 	
 	public Cell(int x, int y, int energy, Genome genome, int[] color, Random random, PhenotypeProvider phenotypeProvider) {
@@ -67,7 +71,7 @@ public class Cell implements Coordinate2D, Context
 		this.genome = genome;
 		this.phenotypeProvider = phenotypeProvider;
 		this.random = random;
-		this.rules = getRules(genome);
+		this.program = getRules(genome);
 	}
 
 	public int getX() {
@@ -118,15 +122,10 @@ public class Cell implements Coordinate2D, Context
 		if (lit) {
 			energy += Settings.SUNLIT_ENERGY_GAIN;
 		}
-		if (rules != null) {
-			int actions_taken = 0;
-			for (Rule rule : rules) {
-				if (rule.apply(grid, cell)) {
-					actions_taken++;
-					if (actions_taken >= Settings.ACTIONS_PER_STEP) {
-						break;						
-					}
-				}
+		if (program != null) {
+			Action action = program[programStep].getAction(grid, cell);
+			if (action != null) {
+				action.apply(grid, cell);
 			}
 		}
 		energy -= Settings.AGE_ENERGY_COST;
@@ -151,6 +150,12 @@ public class Cell implements Coordinate2D, Context
 			return true;
 		}
 		return false;
+	}
+
+	public void moveProgramStep(int delta) {
+		programStep += delta;
+		while (programStep < 0) programStep += program.length;
+		if (programStep >= program.length) programStep %= program.length;
 	}
 	
 	public int getKinship(Cell cell) {

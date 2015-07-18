@@ -12,16 +12,14 @@ public class MoveAction implements Action {
 		this.offset = offset;
 	}
 	
-	public boolean apply(Grid<Cell> grid, Cell cell) {
+	public void apply(Grid<Cell> grid, Cell cell) {
 		if (grid.move(cell, offset.getX(grid, cell), offset.getY(grid, cell))) {
 			if (!cell.isConnected() && offset.getY(grid, cell) < 0) {
 				cell.setEnergy(cell.getEnergy() - Settings.FLY_ENERGY_COST);				
 			} else {
 				cell.setEnergy(cell.getEnergy() - Settings.MOVE_ENERGY_COST);				
 			}
-			return true;
 		}
-		return false;
 	}
 	
 	public String toString() {

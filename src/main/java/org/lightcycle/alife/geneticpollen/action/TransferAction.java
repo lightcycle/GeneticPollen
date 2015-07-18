@@ -18,7 +18,7 @@ public class TransferAction implements Action {
 		this.energySource = energySource;
 	}
 	
-	public boolean apply(Grid<Cell> grid, Cell cell) {
+	public void apply(Grid<Cell> grid, Cell cell) {
 		Cell neighbor = grid.get(cell.getX() + offset.getX(grid, cell), cell.getY() + offset.getY(grid, cell));
 		if (neighbor != null) {
 			int amount = energySource.getInt(grid, cell);
@@ -33,9 +33,7 @@ public class TransferAction implements Action {
 			
 			cell.setEnergy(cell.getEnergy() - amount);
 			neighbor.setEnergy(neighbor.getEnergy() + amount);
-			return true;
 		}
-		return false;
 	}
 	
 	public String toString() {

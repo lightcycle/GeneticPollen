@@ -13,13 +13,13 @@ Cells are updated in random order, performing a single action selected by a list
 
 ### Actions
 
-On each turn a cell may move, reproduce, share energy, or steal energy in a specific direction.
+On each turn a cell may move, reproduce, share energy, steal energy, or change which rule will be evaluated on the next turn.
 
 ### Genetic System
 
 Each cell's genome is a simple array of integers.  This array may be modified during reproduction to simulate mutation.
 
-Each cell's phenotype is a list of rules, and each rule is composed of an action and an expression tree that evaluates to true or false.  The expression tree is composed of objects that can return the cell state, neighboring cells' states, and perform logical and mathematical operations that combine the results of other function calls.  On each turn the cell's rules are checked in order, and the first rule with an expression tree that returns true has its associated action performed by the cell.
+Each cell's phenotype is a list of rules, and each rule is composed of an action and an expression tree that evaluates to true or false.  The expression tree is composed of objects that can return the cell state, neighboring cells' states, and perform logical and mathematical operations that combine the results of other function calls.  On each turn the cell's current rule is checked, and performs the action returned.
 
 The `PhenotypeProvider` class is responsible for producing the phenotype from the genome.  It uses a dependency injection approach.  When an instance of a particular Java interface is requested from `PhenotypeProvider`, it uses the next integer from the genome to select from among the known classes that implement the interface.  If the selected class's constructor takes arguments, the same approach is used again to create instances of those types.  Enumerations and constants are also instantiated from genome input.  In this manner, a tree of objects is created from a simple genome that is easy to copy and manipulate.
 
