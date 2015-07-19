@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 mainClassName = 'org.lightcycle.alife.geneticpollen.App'
+sourceCompatibility = '1.8'
 
 repositories {
     mavenCentral()
