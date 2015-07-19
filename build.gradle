@@ -9,6 +9,7 @@ repositories {
 }
 
 dependencies {
-    compile "org.reflections:reflections:0.9.10"
+    compile 'org.reflections:reflections:0.9.10',
+            'org.apache.commons:commons-lang3:3.4'
     testCompile 'junit:junit:4.12'
 }
