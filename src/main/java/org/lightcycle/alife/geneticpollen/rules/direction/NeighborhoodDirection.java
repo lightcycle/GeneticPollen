@@ -1,10 +1,12 @@
-package org.lightcycle.alife.geneticpollen.rules;
+package org.lightcycle.alife.geneticpollen.rules.direction;
 
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
+import org.lightcycle.alife.geneticpollen.rules.direction.Direction;
+import org.lightcycle.alife.geneticpollen.rules.direction.DirectionSource;
 
 public class NeighborhoodDirection implements DirectionSource {
-	enum Type {
+	public enum Type {
 		MOST_NEIGHBORS,
 		MOST_ENERGY,
 		CLOSEST_KINSHIP;

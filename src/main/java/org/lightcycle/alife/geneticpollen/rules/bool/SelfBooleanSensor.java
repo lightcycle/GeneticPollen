@@ -1,7 +1,8 @@
-package org.lightcycle.alife.geneticpollen.rules;
+package org.lightcycle.alife.geneticpollen.rules.bool;
 
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
+import org.lightcycle.alife.geneticpollen.rules.bool.BooleanSource;
 
 public class SelfBooleanSensor implements BooleanSource {
 	public enum Type {

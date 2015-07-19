@@ -1,8 +1,9 @@
-package org.lightcycle.alife.geneticpollen;
+package org.lightcycle.alife.geneticpollen.rules.direction;
 
+import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.Direction;
 import org.lightcycle.alife.geneticpollen.rules.DirectionSource;
+import org.lightcycle.alife.geneticpollen.rules.direction.Direction;
 
 public class DirectionModifier implements DirectionSource {
 	public enum Type {

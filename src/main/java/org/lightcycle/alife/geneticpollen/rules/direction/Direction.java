@@ -1,4 +1,4 @@
-package org.lightcycle.alife.geneticpollen.rules;
+package org.lightcycle.alife.geneticpollen.rules.direction;
 
 import static java.lang.Math.*;
 
