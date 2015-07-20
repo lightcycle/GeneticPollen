@@ -1,9 +1,7 @@
 package org.lightcycle.alife.geneticpollen.rules.action;
 
 import org.lightcycle.alife.geneticpollen.Cell;
-import org.lightcycle.alife.geneticpollen.action.Action;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.action.ActionSource;
 import org.lightcycle.alife.geneticpollen.rules.bool.BooleanSource;
 
 public class IfElseAction implements ActionSource {

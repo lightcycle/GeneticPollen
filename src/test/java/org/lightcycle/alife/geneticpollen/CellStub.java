@@ -1,9 +1,9 @@
 package org.lightcycle.alife.geneticpollen;
 
-import org.lightcycle.alife.geneticpollen.context.Context;
+import org.lightcycle.alife.geneticpollen.context.Connectable;
 import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
 
-public class CellStub implements Coordinate2D, Context {
+public class CellStub implements Coordinate2D, Connectable {
 
 	private int x, y, energy;
 	

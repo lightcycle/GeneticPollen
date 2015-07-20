@@ -14,10 +14,10 @@ public class Connected {
 		BOTTOM;
 	}
 	
-	public static <T extends Coordinate2D & Context> void determineConnected(Grid<T> grid, EnumSet<Bound> bounds) {
+	public static <T extends Coordinate2D & Connectable> void determineConnected(Grid<T> grid, EnumSet<Bound> bounds) {
 		// Clear connected context flag on all cells
-		for (Context context : grid.getItems()) {
-			context.setConnected(false);
+		for (Connectable connectable : grid.getItems()) {
+			connectable.setConnected(false);
 		}
 		
 		// Update starting from edges
@@ -56,7 +56,7 @@ public class Connected {
 		}
 	}
 	
-	private static <T extends Coordinate2D & Context> void markConnected(Grid<T> grid, T cell) {
+	private static <T extends Coordinate2D & Connectable> void markConnected(Grid<T> grid, T cell) {
 		Stack<T> candidates = new Stack<T>();
 		T neighbor;
 		candidates.push(cell);

@@ -6,6 +6,7 @@ import org.lightcycle.alife.geneticpollen.context.Connected.Bound;
 import org.lightcycle.alife.geneticpollen.grid.Grid.WrapMode;
 
 public class Settings {
+	public static final String ROOT_PACKAGE = "org.lightcycle.alife.geneticpollen";
 	public static final long FPS = 60L;
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 400;

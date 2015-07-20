@@ -90,7 +90,7 @@ public class World extends JPanel implements Runnable {
 	
 	private void seed() {
 		Genomes genomes = new Genomes();
-		PhenotypeProvider phenotypeProvider = new PhenotypeProvider("org.lightcycle.alife.geneticpollen");
+		PhenotypeProvider phenotypeProvider = new PhenotypeProvider(Settings.ROOT_PACKAGE);
 		for (int i = 0; i < Settings.NUMCELLS; ) {
 			if (grid.add(new Cell(random.nextInt(width), random.nextInt(height), Settings.INITIAL_ENERGY, genomes.createRandomGenome(Settings.GENOME_SIZE, random), Util.color(World.random.nextInt(128) + 127, World.random.nextInt(128) + 127, World.random.nextInt(128) + 127), random, phenotypeProvider))) {
 				i++;				

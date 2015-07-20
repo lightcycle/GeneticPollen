@@ -2,8 +2,7 @@ package org.lightcycle.alife.geneticpollen.rules.bool;
 
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.IntegerSource;
-import org.lightcycle.alife.geneticpollen.rules.bool.BooleanSource;
+import org.lightcycle.alife.geneticpollen.rules.scalar.IntegerSource;
 
 public class Comparison implements BooleanSource {
 	public enum Type {

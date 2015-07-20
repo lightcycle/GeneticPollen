@@ -5,19 +5,20 @@ import static org.junit.Assert.*;
 import java.util.Random;
 
 import org.junit.Test;
+import org.lightcycle.alife.geneticpollen.Settings;
 import org.lightcycle.alife.geneticpollen.genetics.Genomes.Genome;
-import org.lightcycle.alife.geneticpollen.rules.BooleanSource;
-import org.lightcycle.alife.geneticpollen.rules.ConditionalAction;
+import org.lightcycle.alife.geneticpollen.rules.action.ActionSource;
+import org.lightcycle.alife.geneticpollen.rules.bool.BooleanSource;
 
 public class PhenotypeProviderTest {
 	private Genomes genomes = new Genomes();
 	private Random random = new Random(1L);
-	private PhenotypeProvider provider = new PhenotypeProvider("org.lightcycle.alife.geneticpollen");
+	private PhenotypeProvider provider = new PhenotypeProvider(Settings.ROOT_PACKAGE);
 	
 	@Test
 	public void canProduceInterface() {
 		try {
-			provider.getInstance(genomes.createRandomGenome(100, random).iterator(), ConditionalAction.class);
+			provider.getInstance(genomes.createRandomGenome(100, random).iterator(), ActionSource.class);
 		} catch (PhenotypeProviderException exception) {
 			fail(exception.getMessage());
 		}

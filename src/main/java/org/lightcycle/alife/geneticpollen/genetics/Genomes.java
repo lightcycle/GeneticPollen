@@ -5,14 +5,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class Genomes {
-	private Triangular2DWeakHashMap<Genome, Integer> kinship;
+	private Triangular2DWeakHashMap<Genome, Integer> kinship = new Triangular2DWeakHashMap<>();
 	
 	private long GENOME_ID_COUNTER = 0L;
-	
-	public Genomes() {
-		kinship = new Triangular2DWeakHashMap<Genome, Integer>();
-	}
-	
+
 	public Genome createRandomGenome(int size, Random random) {
 		Genome genome = new Genome();
 		genome.data = new int[size];
@@ -22,13 +18,7 @@ public class Genomes {
 		return genome;
 	}
 	
-	public Genome createGenome(int[] data) {
-		Genome genome = new Genome();
-		genome.data = data;
-		return genome;
-	}
-		
-	public class Genome implements Iterable<Integer>, Comparable<Genome> {	
+	public class Genome implements Iterable<Integer>, Comparable<Genome> {
 		private Long id;
 		
 		private int[] data;
@@ -93,13 +83,13 @@ public class Genomes {
 		public int compareTo(Genome other) {
 			return id.compareTo(other.id);
 		}
-		
-		@Override	
+
+		@Override
 		public int hashCode() {
 			return id.hashCode();
 		}
-		
-		@Override	
+
+		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof Genome)) {
 				return false;

@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 import org.lightcycle.alife.geneticpollen.grid.Grid.WrapMode;
-import org.lightcycle.alife.geneticpollen.rules.NeighborhoodDirection.Type;
+import org.lightcycle.alife.geneticpollen.rules.direction.NeighborhoodDirection;
+import org.lightcycle.alife.geneticpollen.rules.direction.NeighborhoodDirection.Type;
+import org.lightcycle.alife.geneticpollen.rules.direction.Direction;
+import org.lightcycle.alife.geneticpollen.rules.direction.DirectionSource;
 
 public class NeighborhoodDirectionTest {
 	@Test

@@ -7,17 +7,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.WeakHashMap;
 
-import org.lightcycle.alife.geneticpollen.action.Action;
-import org.lightcycle.alife.geneticpollen.context.Context;
+import org.lightcycle.alife.geneticpollen.context.Lightable;
+import org.lightcycle.alife.geneticpollen.rules.action.Action;
+import org.lightcycle.alife.geneticpollen.context.Connectable;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProvider;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProviderException;
 import org.lightcycle.alife.geneticpollen.genetics.Genomes.Genome;
 import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.ActionSource;
-import org.lightcycle.alife.geneticpollen.rules.ConditionalAction;
+import org.lightcycle.alife.geneticpollen.rules.action.ActionSource;
+import org.lightcycle.alife.geneticpollen.rules.direction.Offset;
+import org.lightcycle.alife.geneticpollen.rules.scalar.IntegerSource;
 
-public class Cell implements Coordinate2D, Context
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
+public class Cell implements Coordinate2D, Connectable, Lightable
 {
 	private int x, y, energy;
 	
@@ -35,32 +40,25 @@ public class Cell implements Coordinate2D, Context
 	
 	private PhenotypeProvider phenotypeProvider;
 	
-	private static Map<Genome, List<ActionSource>> programCache;
+	private static Map<Genome, ActionSource[]> programCache = new WeakHashMap<>();
 	
 	private ActionSource[] getRules(Genome genome) {
 		if (genome == null || phenotypeProvider == null) {
 			return null;
 		}
-		
-		if (programCache == null) {
-			programCache = new WeakHashMap<Genome, List<ActionSource>>();
-		}
-		
-		List<ActionSource> program = programCache.get(genome);
-		if (program == null) {
-			program = new LinkedList<ActionSource>();
-			Iterator<Integer> genomeInput = genome.iterator();
-			while(true) {
+
+		return programCache.computeIfAbsent(genome, g -> {
+			Iterator<Integer> genomeInput = g.iterator();
+			List<ActionSource> actionSources = new LinkedList<ActionSource>();
+			while (true) {
 				try {
-					program.add(phenotypeProvider.getInstance(genomeInput, ActionSource.class));
+					actionSources.add(phenotypeProvider.getInstance(genomeInput, ActionSource.class));
 				} catch (PhenotypeProviderException exception) {
 					break;
 				}
 			}
-			programCache.put(genome, program);
-		}
-		
-		return program.toArray(new ActionSource[0]);
+			return actionSources.toArray(new ActionSource[0]);
+		});
 	}
 	
 	public Cell(int x, int y, int energy, Genome genome, int[] color, Random random, PhenotypeProvider phenotypeProvider) {
@@ -134,31 +132,108 @@ public class Cell implements Coordinate2D, Context
 		}
 	}
 	
-	public boolean reproduce(Grid<Cell> grid, int x, int y) {
-		if (grid.get(x, y) == null && energy >= (Settings.BIRTH_COST + 2)) {
-			energy -= Settings.BIRTH_COST;
-			Cell child = null;
-			if (random.nextDouble() < Settings.MUTATION_PROB) {
-				// mutate
-				child = new Cell(x, y, energy / 2, genome.getMutant(Settings.MUTATION_RATE, random), Util.color(random.nextInt(128) + 127, random.nextInt(128) + 127, random.nextInt(128) + 127), random, phenotypeProvider);
-			} else {
-				// copy
-				child = new Cell(x, y, energy / 2, genome, color, random, phenotypeProvider);
-			}
-			grid.add(child);
-			energy -= child.energy;
-			return true;
-		}
-		return false;
-	}
-
-	public void moveProgramStep(int delta) {
-		programStep += delta;
-		while (programStep < 0) programStep += program.length;
-		if (programStep >= program.length) programStep %= program.length;
-	}
-	
 	public int getKinship(Cell cell) {
 		return genome.getKinship(cell.genome);
 	}
+
+	public static class MoveAction implements Action {
+        private Offset offset;
+
+        public MoveAction(Offset offset) {
+            this.offset = offset;
+        }
+
+        public void apply(Grid<Cell> grid, Cell cell) {
+            if (grid.move(cell, offset.getX(grid, cell), offset.getY(grid, cell))) {
+                if (!cell.connected && offset.getY(grid, cell) < 0) {
+					cell.energy -= Settings.FLY_ENERGY_COST;
+                } else {
+					cell.energy -= Settings.MOVE_ENERGY_COST;
+                }
+            }
+        }
+
+        public String toString() {
+            return "Move(" + offset + ")";
+        }
+    }
+
+	public static class ProgramAction implements Action {
+        private int jump;
+
+        public ProgramAction(int jump) {
+            this.jump = jump;
+        }
+
+        @Override
+        public void apply(Grid<Cell> grid, Cell cell) {
+			cell.programStep += jump;
+			while (cell.programStep < 0) cell.programStep += cell.program.length;
+			if (cell.programStep >= cell.program.length) cell.programStep %= cell.program.length;
+        }
+    }
+
+	public static class ReproduceAction implements Action {
+        private Offset offset;
+
+        public ReproduceAction(Offset offset) {
+            this.offset = offset;
+        }
+
+        public void apply(Grid<Cell> grid, Cell cell) {
+			int x = cell.x + offset.getX(grid, cell);
+			int y = cell.y + offset.getY(grid, cell);
+
+			if (grid.get(x, y) == null && cell.energy >= (Settings.BIRTH_COST + 2)) {
+				cell.energy -= Settings.BIRTH_COST;
+				Cell child = null;
+				if (cell.random.nextDouble() < Settings.MUTATION_PROB) {
+					// mutate
+					child = new Cell(x, y, cell.energy / 2, cell.genome.getMutant(Settings.MUTATION_RATE, cell.random), Util.color(cell.random.nextInt(128) + 127, cell.random.nextInt(128) + 127, cell.random.nextInt(128) + 127), cell.random, cell.phenotypeProvider);
+				} else {
+					// copy
+					child = new Cell(x, y, cell.energy / 2, cell.genome, cell.color, cell.random, cell.phenotypeProvider);
+				}
+				grid.add(child);
+				cell.energy -= child.energy;
+			}
+		}
+
+        public String toString() {
+            return "Reproduce(" + offset + ")";
+        }
+    }
+
+	public static class TransferAction implements Action {
+        private Offset offset;
+
+        private IntegerSource energySource;
+
+        public TransferAction(Offset offset, IntegerSource energySource) {
+            this.offset = offset;
+            this.energySource = energySource;
+        }
+
+        public void apply(Grid<Cell> grid, Cell cell) {
+            Cell neighbor = grid.get(cell.x + offset.getX(grid, cell), cell.y + offset.getY(grid, cell));
+            if (neighbor != null) {
+                int amount = energySource.getInt(grid, cell);
+
+                if (amount > 0) {
+                    amount = min(amount, cell.energy);
+                }
+
+                if (amount < 0) {
+                    amount = max(amount, -neighbor.energy);
+                }
+
+                cell.energy -= amount;
+                neighbor.energy += amount;
+            }
+        }
+
+        public String toString() {
+            return "Transfer(" + offset + ", " + energySource.toString() + ")";
+        }
+    }
 }

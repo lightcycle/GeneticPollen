@@ -2,7 +2,6 @@ package org.lightcycle.alife.geneticpollen.rules.bool;
 
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
-import org.lightcycle.alife.geneticpollen.rules.BooleanSource;
 
 public class BooleanConstant implements BooleanSource {
 	boolean value;

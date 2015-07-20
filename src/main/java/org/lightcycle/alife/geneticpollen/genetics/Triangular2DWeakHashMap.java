@@ -6,12 +6,8 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 public class Triangular2DWeakHashMap<K extends Comparable<K>, V> {
-	private Map<K, Map<K, V>> map;
-	
-	public Triangular2DWeakHashMap() {
-		map = new WeakHashMap<K, Map<K, V>>();		
-	}
-	
+	private Map<K, Map<K, V>> map = new WeakHashMap<>();
+
 	public void put(K key1, K key2, V value) {
 		// Order keys
 		if (key1.compareTo(key2) > 0) {
@@ -20,15 +16,9 @@ public class Triangular2DWeakHashMap<K extends Comparable<K>, V> {
 			key1 = temp;
 		}
 		
-		// Get first level, create submap if necessary
-		Map<K, V> submap = map.get(key1);
-		if (submap == null) {
-			submap = new WeakHashMap<K, V>();
-			map.put(key1, submap);
-		}
-		
-		// Store value
-		submap.put(key2, value);
+		map.computeIfAbsent(key1, k1 -> {
+			return new WeakHashMap<K, V>();
+		}).put(key2, value);
 	}
 	
 	public V get(K key1, K key2) {

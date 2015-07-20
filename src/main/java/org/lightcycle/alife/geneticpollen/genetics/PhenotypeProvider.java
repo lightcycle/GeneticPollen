@@ -28,9 +28,9 @@ public class PhenotypeProvider {
 
 	public <T> T getInstance(Iterator<Integer> geneticInput, Class<T> type) throws PhenotypeProviderException {
 		if (Integer.class.equals(type)) {
-			return type.cast(nextGeneticDatum(geneticInput));
+			return type.cast(nextInput(geneticInput));
 		} else if (Boolean.class.equals(type)) {
-			return type.cast(nextGeneticDatum(geneticInput) % 2 == 0);
+			return type.cast(nextInput(geneticInput) % 2 == 0);
 		} else if (type.isEnum()) {
 			return getMember(type.getEnumConstants(), geneticInput);
 		} else {
@@ -66,10 +66,10 @@ public class PhenotypeProvider {
 		if (array == null || array.length == 0) {
 			return null;
 		}
-		return array[nextGeneticDatum(geneticInput) % array.length];
+		return array[nextInput(geneticInput) % array.length];
 	}
 
-	private Integer nextGeneticDatum(Iterator<Integer> geneticInput) throws PhenotypeProviderException {
+	private Integer nextInput(Iterator<Integer> geneticInput) throws PhenotypeProviderException {
 		if (!geneticInput.hasNext()) {
 			throw new PhenotypeProviderException("Reached end of genetic data.");
 		}

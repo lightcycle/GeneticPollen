@@ -4,8 +4,7 @@ import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 
 public class Sunlit {
-	@SuppressWarnings("unchecked")
-	public static <T extends Coordinate2D & Context> void determineSunlit(Grid<T> grid) {
+	public static <T extends Coordinate2D & Lightable> void determineSunlit(Grid<T> grid) {
 		// Clear connected context flag on all cells
 		for (T cell : grid.getItems()) {
 			cell.setLit(false);
