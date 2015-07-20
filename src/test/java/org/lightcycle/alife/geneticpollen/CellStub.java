@@ -1,9 +1,10 @@
 package org.lightcycle.alife.geneticpollen;
 
 import org.lightcycle.alife.geneticpollen.context.Connectable;
+import org.lightcycle.alife.geneticpollen.context.Lightable;
 import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
 
-public class CellStub implements Coordinate2D, Connectable {
+public class CellStub implements Coordinate2D, Connectable, Lightable {
 
 	private int x, y, energy;
 	
@@ -36,12 +37,10 @@ public class CellStub implements Coordinate2D, Connectable {
 		this.y = y;
 	}
 
-	@Override
 	public int getEnergy() {
 		return energy;
 	}
 
-	@Override
 	public void setEnergy(int energy) {
 		this.energy = energy;
 	}
