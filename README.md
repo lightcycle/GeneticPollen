@@ -9,7 +9,7 @@ A Java artificial life demonstration with evolving behavior.
 
 ### Overview
 
-Cells are updated in random order, performing a single action selected by a list of rules that examine the cell's neighborhood and the cell's own state.  Cells start with a certain amount of energy and are removed when energy reaches zero.  Cells lose a cetain amount of energy on each step and when performing actions.  Cells gain energy when they are the topmost cell.
+Cells are updated in random order, performing a single action selected by a list of rules that examine the cell's neighborhood and the cell's own state.  Cells start with a certain amount of energy and are removed when energy reaches zero.  Cells lose a set amount of energy on each step and when performing actions.  Cells gain energy when they are the topmost cell.
 
 ### Actions
 
