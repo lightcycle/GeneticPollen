@@ -5,6 +5,10 @@ A Java artificial life demonstration with evolving behavior.
 
 ![Alt text](http://lightcycle.github.io/screenshots/GeneticPollen.png "Genetic Pollen Screenshot")
 
+## Quickstart
+
+[Gradle](https://gradle.org/) and [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html) are required.  Run with `gradle run`.
+
 ## Details
 
 ### Overview
