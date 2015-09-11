@@ -1,6 +1,6 @@
 package org.lightcycle.alife.geneticpollen.grid;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -24,7 +24,7 @@ public class Grid<T extends Coordinate2D> {
 		this.width = width;
 		this.height = height;
 		this.wrapMode = wrapMode;
-		items = new LinkedList<T>();
+		items = new ArrayList<T>();
 		grid = new Object[width][height];
 	}
 

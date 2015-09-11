@@ -41,7 +41,7 @@ public class Simulation {
         }
     }
 
-    synchronized public void step() {
+    public void step() {
         for (ContextRule contextRule : contextRulesBefore) {
             contextRule.apply(grid);
         }
@@ -55,9 +55,11 @@ public class Simulation {
         }
     }
 
-    synchronized public void draw(WritableRaster raster) {
-        for (Cell cell : grid.getItems()) {
-            raster.setPixel(cell.getX(), cell.getY(), cell.getColor());
+    public void draw(WritableRaster raster) {
+        for (Cell cell : grid.getItems().toArray(new Cell[0])) {
+            if (cell != null) {
+                raster.setPixel(cell.getX(), cell.getY(), cell.getColor());
+            }
         }
     }
 }
