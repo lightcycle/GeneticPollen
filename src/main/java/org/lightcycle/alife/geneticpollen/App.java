@@ -8,7 +8,7 @@ public class App extends JFrame {
 	}
 	
 	public App() {
-		World world = new World(Settings.WIDTH, Settings.HEIGHT);
+		SimPanel world = new SimPanel();
 		add(world);
 		new Thread(world).start();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

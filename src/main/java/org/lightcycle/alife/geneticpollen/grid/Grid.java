@@ -1,7 +1,8 @@
 package org.lightcycle.alife.geneticpollen.grid;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Grid<T extends Coordinate2D> {
 	public enum WrapMode {
@@ -23,10 +24,10 @@ public class Grid<T extends Coordinate2D> {
 		this.width = width;
 		this.height = height;
 		this.wrapMode = wrapMode;
-		items = new ArrayList<T>();
+		items = new LinkedList<T>();
 		grid = new Object[width][height];
 	}
-	
+
 	public boolean add(T item) {
 		item.setX(wrapX(item.getX()));
 		item.setY(wrapY(item.getY()));
@@ -38,7 +39,18 @@ public class Grid<T extends Coordinate2D> {
 			return false;
 		}
 	}
-	
+
+	public boolean add(T item, ListIterator<T> iter) {
+		item.setX(wrapX(item.getX()));
+		item.setY(wrapY(item.getY()));
+		if (!isOffGrid(item.getX(), item.getY()) && grid[item.getX()][item.getY()] == null) {
+			grid[item.getX()][item.getY()] = item;
+			iter.add(item);
+			return true;
+		} else {
+			return false;
+		}
+	}
 	public void remove(T item) {
 		grid[item.getX()][item.getY()] = null;
 		items.remove(item);

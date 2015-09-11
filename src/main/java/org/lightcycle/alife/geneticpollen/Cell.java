@@ -1,15 +1,8 @@
 package org.lightcycle.alife.geneticpollen;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.WeakHashMap;
+import java.util.*;
 
-import org.lightcycle.alife.geneticpollen.context.Lightable;
 import org.lightcycle.alife.geneticpollen.rules.action.Action;
-import org.lightcycle.alife.geneticpollen.context.Connectable;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProvider;
 import org.lightcycle.alife.geneticpollen.genetics.PhenotypeProviderException;
 import org.lightcycle.alife.geneticpollen.genetics.Genomes.Genome;
@@ -22,7 +15,7 @@ import org.lightcycle.alife.geneticpollen.rules.scalar.IntegerSource;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Cell implements Coordinate2D, Connectable, Lightable
+public class Cell implements Coordinate2D
 {
 	private int x, y, energy;
 	
@@ -116,20 +109,17 @@ public class Cell implements Coordinate2D, Connectable, Lightable
 		return color;
 	}
 	
-	public void update(Grid<Cell> grid, Cell cell) {
+	public void update(Grid<Cell> grid, ListIterator<Cell> cellIter) {
 		if (lit) {
 			energy += Settings.SUNLIT_ENERGY_GAIN;
 		}
 		if (program != null) {
-			Action action = program[programStep].getAction(grid, cell);
+			Action action = program[programStep].getAction(grid, this);
 			if (action != null) {
-				action.apply(grid, cell);
+				action.apply(grid, this, cellIter);
 			}
 		}
 		energy -= Settings.AGE_ENERGY_COST;
-		if (energy <= 0) {
-			grid.remove(this);
-		}
 	}
 	
 	public int getKinship(Cell cell) {
@@ -143,7 +133,7 @@ public class Cell implements Coordinate2D, Connectable, Lightable
             this.offset = offset;
         }
 
-        public void apply(Grid<Cell> grid, Cell cell) {
+        public void apply(Grid<Cell> grid, Cell cell, ListIterator<Cell> cellIter) {
             if (grid.move(cell, offset.getX(grid, cell), offset.getY(grid, cell))) {
                 if (!cell.connected && offset.getY(grid, cell) < 0) {
 					cell.energy -= Settings.FLY_ENERGY_COST;
@@ -166,7 +156,7 @@ public class Cell implements Coordinate2D, Connectable, Lightable
         }
 
         @Override
-        public void apply(Grid<Cell> grid, Cell cell) {
+        public void apply(Grid<Cell> grid, Cell cell, ListIterator<Cell> cellIter) {
 			cell.programStep += jump;
 			while (cell.programStep < 0) cell.programStep += cell.program.length;
 			if (cell.programStep >= cell.program.length) cell.programStep %= cell.program.length;
@@ -180,7 +170,7 @@ public class Cell implements Coordinate2D, Connectable, Lightable
             this.offset = offset;
         }
 
-        public void apply(Grid<Cell> grid, Cell cell) {
+        public void apply(Grid<Cell> grid, Cell cell, ListIterator<Cell> cellIter) {
 			int x = cell.x + offset.getX(grid, cell);
 			int y = cell.y + offset.getY(grid, cell);
 
@@ -194,7 +184,7 @@ public class Cell implements Coordinate2D, Connectable, Lightable
 					// copy
 					child = new Cell(x, y, cell.energy / 2, cell.genome, cell.color, cell.random, cell.phenotypeProvider);
 				}
-				grid.add(child);
+				grid.add(child, cellIter);
 				cell.energy -= child.energy;
 			}
 		}
@@ -214,7 +204,7 @@ public class Cell implements Coordinate2D, Connectable, Lightable
             this.energySource = energySource;
         }
 
-        public void apply(Grid<Cell> grid, Cell cell) {
+        public void apply(Grid<Cell> grid, Cell cell, ListIterator<Cell> cellIter) {
             Cell neighbor = grid.get(cell.x + offset.getX(grid, cell), cell.y + offset.getY(grid, cell));
             if (neighbor != null) {
                 int amount = energySource.getInt(grid, cell);

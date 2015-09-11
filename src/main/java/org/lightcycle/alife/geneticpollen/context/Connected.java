@@ -3,25 +3,32 @@ package org.lightcycle.alife.geneticpollen.context;
 import java.util.EnumSet;
 import java.util.Stack;
 
-import org.lightcycle.alife.geneticpollen.grid.Coordinate2D;
+import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 
-public class Connected {
+public class Connected implements ContextRule {
 	public static enum Bound {
 		TOP,
 		LEFT,
 		RIGHT,
 		BOTTOM;
 	}
-	
-	public static <T extends Coordinate2D & Connectable> void determineConnected(Grid<T> grid, EnumSet<Bound> bounds) {
+
+	private EnumSet<Bound> bounds;
+
+	public Connected(EnumSet<Bound> bounds) {
+		this.bounds = bounds;
+	}
+
+	@Override
+	public void apply(Grid<Cell> grid) {
 		// Clear connected context flag on all cells
-		for (Connectable connectable : grid.getItems()) {
-			connectable.setConnected(false);
+		for (Cell cell : grid.getItems()) {
+			cell.setConnected(false);
 		}
 		
 		// Update starting from edges
-		T cell;
+		Cell cell;
 		if (bounds.contains(Bound.TOP)) {
 			for (int x = 0; x < grid.getWidth(); x++) {
 				cell = grid.get(x, 0);
@@ -56,9 +63,9 @@ public class Connected {
 		}
 	}
 	
-	private static <T extends Coordinate2D & Connectable> void markConnected(Grid<T> grid, T cell) {
-		Stack<T> candidates = new Stack<T>();
-		T neighbor;
+	private void markConnected(Grid<Cell> grid, Cell cell) {
+		Stack<Cell> candidates = new Stack<Cell>();
+		Cell neighbor;
 		candidates.push(cell);
 		while (!candidates.isEmpty()) {
 			cell = candidates.pop();

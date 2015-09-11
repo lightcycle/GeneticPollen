@@ -21,7 +21,7 @@ public class TransferActionTest {
 		grid.add(cell);
 		grid.add(neighbor);
 		Action transfer = new Cell.TransferAction(new DirectionOffset(new ConstantDirection(Direction.LEFT)), new IntegerConstant(0));
-		transfer.apply(grid, cell);
+		transfer.apply(grid, cell, null);
 		assertEquals(100, cell.getEnergy());
 		assertEquals(0, neighbor.getEnergy());
 	}
@@ -34,7 +34,7 @@ public class TransferActionTest {
 		grid.add(cell);
 		grid.add(neighbor);
 		Action transfer = new Cell.TransferAction(new DirectionOffset(new ConstantDirection(Direction.LEFT)), new IntegerConstant(10));
-		transfer.apply(grid, cell);
+		transfer.apply(grid, cell, null);
 		assertEquals(90, cell.getEnergy());
 		assertEquals(10, neighbor.getEnergy());
 	}
@@ -47,7 +47,7 @@ public class TransferActionTest {
 		grid.add(cell);
 		grid.add(neighbor);
 		Action transfer = new Cell.TransferAction(new DirectionOffset(new ConstantDirection(Direction.LEFT)), new IntegerConstant(1000));
-		transfer.apply(grid, cell);
+		transfer.apply(grid, cell, null);
 		assertEquals(0, cell.getEnergy());
 		assertEquals(100, neighbor.getEnergy());
 	}
@@ -60,7 +60,7 @@ public class TransferActionTest {
 		grid.add(cell);
 		grid.add(neighbor);
 		Action transfer = new Cell.TransferAction(new DirectionOffset(new ConstantDirection(Direction.LEFT)), new IntegerConstant(-10));
-		transfer.apply(grid, cell);
+		transfer.apply(grid, cell, null);
 		assertEquals(110, cell.getEnergy());
 		assertEquals(90, neighbor.getEnergy());
 	}
@@ -73,7 +73,7 @@ public class TransferActionTest {
 		grid.add(cell);
 		grid.add(neighbor);
 		Action transfer = new Cell.TransferAction(new DirectionOffset(new ConstantDirection(Direction.LEFT)), new IntegerConstant(-1000));
-		transfer.apply(grid, cell);
+		transfer.apply(grid, cell, null);
 		assertEquals(200, cell.getEnergy());
 		assertEquals(0, neighbor.getEnergy());
 	}

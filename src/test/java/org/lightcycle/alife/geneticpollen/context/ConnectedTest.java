@@ -5,12 +5,14 @@ import java.util.EnumSet;
 import junit.framework.TestCase;
 
 import org.junit.Test;
-import org.lightcycle.alife.geneticpollen.CellStub;
-import org.lightcycle.alife.geneticpollen.context.Connected;
+import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
 import org.lightcycle.alife.geneticpollen.grid.Grid.WrapMode;
+import org.lightcycle.alife.geneticpollen.testutil.CellUtil;
 
 public class ConnectedTest extends TestCase {
+	private final Connected connected = new Connected(EnumSet.of(Connected.Bound.BOTTOM));
+
 	@Test
 	public void testConnected() {
 		// _____
@@ -18,17 +20,17 @@ public class ConnectedTest extends TestCase {
 		// _X_X_
 		// X__X_
 		// ___X_
-		Grid<CellStub> grid = new Grid<CellStub>(5, 5, WrapMode.XY);
-		grid.add(new CellStub(3, 4));
-		grid.add(new CellStub(3, 3));
-		grid.add(new CellStub(3, 2));
-		grid.add(new CellStub(3, 1));
-		grid.add(new CellStub(2, 1));
-		grid.add(new CellStub(1, 1));
-		grid.add(new CellStub(1, 2));
-		grid.add(new CellStub(0, 3));
+		Grid<Cell> grid = new Grid<>(5, 5, WrapMode.XY);
+		grid.add(CellUtil.createCell(3, 4));
+		grid.add(CellUtil.createCell(3, 3));
+		grid.add(CellUtil.createCell(3, 2));
+		grid.add(CellUtil.createCell(3, 1));
+		grid.add(CellUtil.createCell(2, 1));
+		grid.add(CellUtil.createCell(1, 1));
+		grid.add(CellUtil.createCell(1, 2));
+		grid.add(CellUtil.createCell(0, 3));
 		
-		Connected.determineConnected(grid, EnumSet.of(Connected.Bound.BOTTOM));
+		connected.apply(grid);
 		
 		// Cells listed correctly
 		assertTrue(grid.get(3, 4).isConnected());

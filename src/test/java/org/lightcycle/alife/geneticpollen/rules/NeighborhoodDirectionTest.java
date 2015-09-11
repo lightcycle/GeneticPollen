@@ -1,7 +1,6 @@
 package org.lightcycle.alife.geneticpollen.rules;
 
-import static org.junit.Assert.*;
-
+import junit.framework.TestCase;
 import org.junit.Test;
 import org.lightcycle.alife.geneticpollen.Cell;
 import org.lightcycle.alife.geneticpollen.grid.Grid;
@@ -11,7 +10,7 @@ import org.lightcycle.alife.geneticpollen.rules.direction.NeighborhoodDirection.
 import org.lightcycle.alife.geneticpollen.rules.direction.Direction;
 import org.lightcycle.alife.geneticpollen.rules.direction.DirectionSource;
 
-public class NeighborhoodDirectionTest {
+public class NeighborhoodDirectionTest  extends TestCase {
 	@Test
 	public void testMostNeighborsUp() {
 		Grid<Cell> grid = new Grid<Cell>(3, 3, WrapMode.NONE);
