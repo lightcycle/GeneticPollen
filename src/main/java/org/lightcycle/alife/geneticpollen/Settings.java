@@ -11,7 +11,7 @@ public class Settings {
 	public static final int WIDTH = 600;
 	public static final int HEIGHT = 300;
 	public static final int NUMCELLS = 500;
-	public static final int GENOME_SIZE = 1000;
+	public static final int GENOME_SIZE = 100;
 	public static final int INITIAL_ENERGY = 1000;
 	public static final int MOVE_ENERGY_COST = 5;
 	public static final int FLY_ENERGY_COST = 50;

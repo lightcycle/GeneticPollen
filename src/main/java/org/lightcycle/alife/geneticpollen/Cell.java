@@ -113,7 +113,7 @@ public class Cell implements Coordinate2D
 		if (lit) {
 			energy += Settings.SUNLIT_ENERGY_GAIN;
 		}
-		if (program != null) {
+		if (program != null && program.length > 0) {
 			Action action = program[programStep].getAction(grid, this);
 			if (action != null) {
 				action.apply(grid, this, cellIter);
