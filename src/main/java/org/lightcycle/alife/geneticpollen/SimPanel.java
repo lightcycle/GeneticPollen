@@ -7,20 +7,14 @@ import java.awt.image.WritableRaster;
 import java.util.Arrays;
 
 public class SimPanel extends JPanel implements Runnable {
-	private int[] background;
+	private final int[] background = new int[3*Settings.WIDTH*Settings.HEIGHT];
 
-	private final Simulation simulation;
+	private final Simulation simulation = new Simulation();
 
-	public SimPanel() {
-		background = new int[3*Settings.WIDTH*Settings.HEIGHT];
-		Arrays.fill(background,0);
-		simulation = new Simulation();
-	}
-	
-	private BufferedImage image;
-	
-	private WritableRaster raster;
-	
+	private final BufferedImage image = new BufferedImage(Settings.WIDTH, Settings.HEIGHT, BufferedImage.TYPE_INT_RGB);
+
+	private final WritableRaster raster = image.getRaster();
+
 	private long lastUpdateNanos = 0L;
 	
 	private static final long FPS60NANOS = 1000000000L / Settings.FPS;
@@ -29,16 +23,6 @@ public class SimPanel extends JPanel implements Runnable {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (image == null) {
-			image = (BufferedImage) createImage(Settings.WIDTH, Settings.HEIGHT);
-		}
-		
-		if (raster == null) {
-			raster = image.getRaster();
-		}
-		
-		raster.setPixels(0,0,image.getWidth(),image.getHeight(),background);
-		simulation.draw(raster);
 		g.drawImage(image, 0, 0, getWidth(), getHeight(), null);
 	}
 
@@ -48,6 +32,8 @@ public class SimPanel extends JPanel implements Runnable {
 			long nowNanos = System.nanoTime();
 			if (nowNanos - lastUpdateNanos > FPS60NANOS) {
 				lastUpdateNanos = nowNanos;
+				raster.setPixels(0,0,image.getWidth(),image.getHeight(),background);
+				simulation.draw(raster);
 				repaint();
 			}
 		}
