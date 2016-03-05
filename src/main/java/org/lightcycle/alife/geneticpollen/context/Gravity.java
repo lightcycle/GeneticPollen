@@ -7,10 +7,8 @@ import org.lightcycle.alife.geneticpollen.grid.Grid;
 public class Gravity implements ContextRule {
     @Override
     public void apply(Grid<Cell> grid) {
-        for (Cell cell : grid.getItems()) {
-            if (!cell.isConnected()) {
-                grid.move(cell, 0, 1);
-            }
-        }
+        grid.getItems().stream()
+                .filter(cell -> !cell.isConnected())
+                .forEach(cell -> grid.move(cell, 0, 1));
     }
 }

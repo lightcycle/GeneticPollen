@@ -8,9 +8,8 @@ public class Sunlit implements ContextRule {
 	@Override
 	public void apply(Grid<Cell> grid) {
 		// Clear connected context flag on all cells
-		for (Cell cell : grid.getItems()) {
-			cell.setLit(false);
-		}
+		grid.getItems().stream()
+				.forEach(cell -> cell.setLit(false));
 
 		// Determine highest cell in each column
 		Cell[] topcell = new Cell[grid.getWidth()];

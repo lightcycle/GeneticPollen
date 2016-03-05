@@ -23,10 +23,8 @@ public class Connected implements ContextRule {
 	@Override
 	public void apply(Grid<Cell> grid) {
 		// Clear connected context flag on all cells
-		for (Cell cell : grid.getItems()) {
-			cell.setConnected(false);
-		}
-		
+		grid.getItems().forEach(cell -> cell.setConnected(false));
+
 		// Update starting from edges
 		Cell cell;
 		if (bounds.contains(Bound.TOP)) {
