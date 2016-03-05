@@ -56,10 +56,6 @@ public class Simulation {
     }
 
     public void draw(WritableRaster raster) {
-        for (Cell cell : grid.getItems().toArray(new Cell[0])) {
-            if (cell != null) {
-                raster.setPixel(cell.getX(), cell.getY(), cell.getColor());
-            }
-        }
+        grid.getItems().stream().forEach(cell -> raster.setPixel(cell.getX(), cell.getY(), cell.getColor()));
     }
 }
